@@ -10,7 +10,8 @@ TvShowDetailView.prototype.createTvShowDetail = function (show){
 
   const tvShowDetailsList = document.createElement('ul');
 
-  const summary = this.createDetailListItem('Summary', show.summary);
+  const summaryText = show.summary.replace("<p><b>","").replace("</b>", "").replace("</p>","").replace("\"", "") ;
+  const summary = this.createDetailListItem('Summary', summaryText);
   tvShowDetailsList.appendChild(summary);
 
   const image = document.createElement('img');
