@@ -6,12 +6,11 @@ const TvShows = function (){
 };
 
 TvShows.prototype.getData = function () {
-
-  const requestHelper = new Request ('https://munroapi.herokuapp.com/api/munros');
-  requestHelper.get( (data) => {
+  const requestHelper = new Request ('http://api.tvmaze.com/shows');
+  requestHelper.get()
+  .then(data => {
     this.tvShowsData = data;
     PubSub.publish('TvShows:list-of-shows-ready', this.tvShowsData);
-    console.log(data);
   });
 };
 

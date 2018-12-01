@@ -1,5 +1,5 @@
 const PubSub = require('../helpers/pub_sub.js');
-const TvShowDetailView = require('./tv_show_detail_view');
+const TvShowDetailView = require('./tv_show_detail_view.js');
 
 const TvShowListView = function (container) {
   this.container = container;
@@ -23,7 +23,5 @@ TvShowListView.prototype.createTvShowListItem = function (show) {
   const tvShowDetail = tvShowDetailView.createTvShowDetail(show);
   return tvShowDetail;
 };
-
-
 
 module.exports = TvShowListView;
