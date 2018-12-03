@@ -119,6 +119,17 @@ eval("const Request = function (url) {\n  this.url = url;\n};\n\nRequest.prototy
 
 /***/ }),
 
+/***/ "./src/helpers/sort.js":
+/*!*****************************!*\
+  !*** ./src/helpers/sort.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("const SortArrayByName = function(array) {\n\nfunction compare(a, b) {\n  const itemA = a.name.toUpperCase();\n  const itemB = b.name.toUpperCase();\n\n  let comparison = 0;\n  if (itemA > itemB) {\n    comparison = 1;\n  } else if (itemA < itemB) {\n    comparison = -1;\n  }\n  return comparison;\n};\n\nreturn array.sort(compare);\n};\n\n\nmodule.exports = SortArrayByName;\n\n\n//# sourceURL=webpack:///./src/helpers/sort.js?");
+
+/***/ }),
+
 /***/ "./src/models/tv_shows.js":
 /*!********************************!*\
   !*** ./src/models/tv_shows.js ***!
@@ -126,7 +137,7 @@ eval("const Request = function (url) {\n  this.url = url;\n};\n\nRequest.prototy
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./src/helpers/request.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\nconst TvShows = function (){\n  this.tvShowsData = [];\n};\n\nTvShows.prototype.getData = function () {\n  const requestHelper = new Request ('http://api.tvmaze.com/shows');\n  requestHelper.get()\n  .then(data => {\n    this.tvShowsData = data;\n    PubSub.publish('TvShows:list-of-shows-ready', this.tvShowsData);\n  });\n};\n\nmodule.exports = TvShows;\n\n// 'http://api.tvmaze.com/shows'\n\n\n//# sourceURL=webpack:///./src/models/tv_shows.js?");
+eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./src/helpers/request.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\n\n\nconst TvShows = function (){\n  this.tvShowsData = [];\n};\n\nTvShows.prototype.getData = function () {\n  const requestHelper = new Request ('http://api.tvmaze.com/shows');\n  requestHelper.get()\n  .then(data => {\n    this.tvShowsData = data;\n    PubSub.publish('TvShows:list-of-shows-ready', this.tvShowsData);\n  });\n};\n\n\nmodule.exports = TvShows;\n\n// 'http://api.tvmaze.com/shows'\n\n\n//# sourceURL=webpack:///./src/models/tv_shows.js?");
 
 /***/ }),
 
@@ -137,7 +148,7 @@ eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./src/h
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("const TvShowDetailView = function () {};\n\nTvShowDetailView.prototype.createTvShowDetail = function (show){\n  const tvShowDetail = document.createElement('div');\n  tvShowDetail.classList.add('tv-show-detail');\n\n  const name = document.createElement('h3');\n  name.textContent = show.name;\n  tvShowDetail.appendChild(name);\n\n  const tvShowDetailsList = document.createElement('ul');\n\n  const summaryText = show.summary.replace(\"<p><b>\",\"\").replace(\"</b>\", \"\").replace(\"</p>\",\"\").replace(\"\\\"\", \"\") ;\n  const summary = this.createDetailListItem('Summary', summaryText);\n  tvShowDetailsList.appendChild(summary);\n\n  const image = document.createElement('img');\n  image.src = show.image.medium;\n  tvShowDetailsList.appendChild(image);\n\n  tvShowDetail.appendChild(tvShowDetailsList);\n\n  return tvShowDetail;\n};\n\nTvShowDetailView.prototype.createDetailListItem = function (label, property) {\n  const element = document.createElement('li');\n  element.textContent = `${label}: ${property}`;\n  return element;\n};\n\nmodule.exports = TvShowDetailView;\n\n\n//# sourceURL=webpack:///./src/views/tv_show_detail_view.js?");
+eval("const TvShowDetailView = function () {};\n\nTvShowDetailView.prototype.createTvShowDetail = function (show){\n  const tvShowDetail = document.createElement('div');\n  tvShowDetail.classList.add('tv-show-detail');\n\n  const name = document.createElement('h3');\n  name.textContent = show.name;\n  tvShowDetail.appendChild(name);\n\n  const tvShowDetailsList = document.createElement('ul');\n\n  function stripHtml(html){\n    // Create a new div element\n    const temporalDivElement = document.createElement(\"div\");\n    // Set the HTML content with the provided\n    temporalDivElement.innerHTML = html;\n    // Retrieve the text property of the element (cross-browser support)\n    return temporalDivElement.textContent || temporalDivElement.innerText || \"\";\n  }\n\n  const summaryText = (stripHtml(show.summary));\n\n\n  const image = document.createElement('img');\n  image.src = show.image.medium;\n  tvShowDetailsList.appendChild(image);\n\n  const summary = this.createDetailListItem('Summary: ', summaryText);\n  tvShowDetailsList.appendChild(summary);\n\n  \n\n\n  tvShowDetail.appendChild(tvShowDetailsList);\n\n  return tvShowDetail;\n};\n\n\nTvShowDetailView.prototype.createDetailListItem = function (label, property) {\n  const element = document.createElement('li');\n  element.textContent = `${label}${property}`;\n  return element;\n};\n\nmodule.exports = TvShowDetailView;\n\n\n//# sourceURL=webpack:///./src/views/tv_show_detail_view.js?");
 
 /***/ }),
 
@@ -148,7 +159,7 @@ eval("const TvShowDetailView = function () {};\n\nTvShowDetailView.prototype.cre
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst TvShowDetailView = __webpack_require__(/*! ./tv_show_detail_view.js */ \"./src/views/tv_show_detail_view.js\");\n\nconst TvShowListView = function (container) {\n  this.container = container;\n};\n\nTvShowListView.prototype.bindEvents = function () {\n  PubSub.subscribe('TvShows:list-of-shows-ready', (event) => {\n    this.renderTvShowDetailViews(event.detail);\n  });\n};\n\nTvShowListView.prototype.renderTvShowDetailViews = function (tvShows) {\n  tvShows.forEach( (show) => {\n    const showItem = this.createTvShowListItem(show);\n    this.container.appendChild(showItem);\n  });\n};\n\nTvShowListView.prototype.createTvShowListItem = function (show) {\n  const tvShowDetailView = new TvShowDetailView();\n  const tvShowDetail = tvShowDetailView.createTvShowDetail(show);\n  return tvShowDetail;\n};\n\nmodule.exports = TvShowListView;\n\n\n//# sourceURL=webpack:///./src/views/tv_show_list_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./src/helpers/pub_sub.js\");\nconst TvShowDetailView = __webpack_require__(/*! ./tv_show_detail_view.js */ \"./src/views/tv_show_detail_view.js\");\nconst SortArrayByName = __webpack_require__(/*! ../helpers/sort.js */ \"./src/helpers/sort.js\");\n\nconst TvShowListView = function (container) {\n  this.container = container;\n};\n\nTvShowListView.prototype.bindEvents = function () {\n  PubSub.subscribe('TvShows:list-of-shows-ready', (event) => {\n    const data = new SortArrayByName(event.detail);\n    this.renderTvShowDetailViews(data);\n  });\n};\n\nTvShowListView.prototype.renderTvShowDetailViews = function (tvShows) {\n  tvShows.forEach( (show) => {\n    const showItem = this.createTvShowListItem(show);\n    this.container.appendChild(showItem);\n  });\n};\n\nTvShowListView.prototype.createTvShowListItem = function (show) {\n  const tvShowDetailView = new TvShowDetailView();\n  const tvShowDetail = tvShowDetailView.createTvShowDetail(show);\n  return tvShowDetail;\n};\n\nmodule.exports = TvShowListView;\n\n\n//# sourceURL=webpack:///./src/views/tv_show_list_view.js?");
 
 /***/ })
 

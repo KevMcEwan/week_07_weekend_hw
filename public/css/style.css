@@ -1,3 +1,21 @@
 body {
   font-family: arial;
+  color: black;
+  background-color: lightblue;
+}
+
+img {
+  height: 150px;
+}
+
+li {
+  display: flex;
+  align-content: stretch;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+
+h3 {
+  margin: 30px;
 }

@@ -1,6 +1,7 @@
 const Request = require('../helpers/request.js');
 const PubSub = require('../helpers/pub_sub.js');
 
+
 const TvShows = function (){
   this.tvShowsData = [];
 };
@@ -13,6 +14,7 @@ TvShows.prototype.getData = function () {
     PubSub.publish('TvShows:list-of-shows-ready', this.tvShowsData);
   });
 };
+
 
 module.exports = TvShows;
 

@@ -1,5 +1,6 @@
 const PubSub = require('../helpers/pub_sub.js');
 const TvShowDetailView = require('./tv_show_detail_view.js');
+const SortArrayByName = require('../helpers/sort.js');
 
 const TvShowListView = function (container) {
   this.container = container;
@@ -7,7 +8,8 @@ const TvShowListView = function (container) {
 
 TvShowListView.prototype.bindEvents = function () {
   PubSub.subscribe('TvShows:list-of-shows-ready', (event) => {
-    this.renderTvShowDetailViews(event.detail);
+    const data = new SortArrayByName(event.detail);
+    this.renderTvShowDetailViews(data);
   });
 };
 
